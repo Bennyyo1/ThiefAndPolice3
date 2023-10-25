@@ -106,33 +106,48 @@ namespace ThiefAndPolice
             while (true)
             {
                 Grid.Print(SizeX, SizeY, matrix);
+                Console.WriteLine("----------------------------------------------------------------------------------------------------");
+                Console.WriteLine("PRISON");
                 Grid.PrintPrison(prisonX, prisonY, prisonMatrix);
 
-                for (int i = 0; i < personList.Count; i++)
+                for (int i = 0; i < prisonList.Count; i++)
                 {
+                    Person person = prisonList[i];
+                    if (person is Thief)
+                    {
+                        Thief thief = (Thief)person; // Cast to Thief type
+                        if (thief.PrisonTime > 0)
+                        {
+                            Helper.PrisonMovement(thief, prisonMatrix, prisonX, prisonY, personList, prisonList);
+                            thief.PrisonTime--;
+                            Thread.Sleep(1000);
+                            if (thief.PrisonTime <= 0)
+                            {
+
+                                Helper.MoveBackToCity(thief, personList, prisonList, prisonMatrix);
+                                
+                            }
+                        }
+                        
+
+                    }
+                }
+
+                    for (int i = 0; i < personList.Count; i++)
+                    {
                     Person person = personList[i];
                     if (person!= null)
                     {
-                        Helper.Movement(person, matrix, SizeX, SizeY, personList, prisonList);
-
+                            Helper.Movement(person, matrix, SizeX, SizeY, personList, prisonList);
                         
-                        if (person is Thief)
-                        {
-                            Thief thief = (Thief)person; // Cast to Thief type
-                            if (thief.PrisonTime > 0)
-                            {
-                                Helper.PrisonMovement(thief, prisonMatrix, prisonX, prisonY, personList, prisonList);
-                            }
-                            
-                        }
-
+                        
                     }
                     
-                    
-
-                }
+                    }
                 
-                Thread.Sleep(1000);
+                
+                
+                //Thread.Sleep(1000);
                 //prisonTime--;
                 Console.Clear();
                 

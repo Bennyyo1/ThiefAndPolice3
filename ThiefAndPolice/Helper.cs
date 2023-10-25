@@ -43,6 +43,8 @@ namespace ThiefAndPolice
 
             if (person is Thief)
             {
+                
+
                 Thief thief = (Thief)person; // Cast to Thief type
 
                 // Clear the previous position
@@ -104,8 +106,7 @@ namespace ThiefAndPolice
             {
                 newX = 0;
             }
-
-            if (newX < 0)
+            else if (newX < 0)
             {
                 newX = prisonX - 1;
             }
@@ -114,22 +115,25 @@ namespace ThiefAndPolice
             {
                 newY = 0;
             }
-
-            if (newY < 0)
+            else if (newY < 0)
             {
                 newY = prisonY - 1;
             }
 
-            
 
-            if (person is Thief)
+
+
+            Thief thief = (Thief)person; // Cast to Thief type
+
+
+
+
+            // Clear the previous position
+            if (prisonMatrix[thief.X, thief.Y]!= null)
             {
-                Thief thief = (Thief)person; // Cast to Thief type
-
-                thief.X = 5;
-                thief.Y = 5;
-                // Clear the previous position
                 prisonMatrix[thief.X, thief.Y] = null;
+            }
+                
 
                 // Update the thief's position
                 thief.X = newX;
@@ -138,8 +142,8 @@ namespace ThiefAndPolice
                 // Set the new position
                 prisonMatrix[newX, newY] = thief;
 
-
-            }
+            
+            
         }
 
         public static void CheckCollision(int newX, int newY, Person[,] matrix, Person person, List<Person> personList,List<Person>prisonList)
@@ -171,11 +175,11 @@ namespace ThiefAndPolice
                                     thief.PrisonTime +=10;
                                     police.SizedItems.Add(stolenItem);
                                     Console.WriteLine("The police have sized stolen " + stolenItem + " at: " + police.X + "X " + police.Y + "Y");
-                                    //Thread.Sleep(4000);
+                                    Thread.Sleep(4000);
                                 }
  
                                 thief.StolenItems.Clear(); //remove thief items
-                                MoveToPrison(thief, personList, prisonList);
+                                MoveToPrison(thief, personList, prisonList,matrix);
 
 
 
@@ -215,7 +219,7 @@ namespace ThiefAndPolice
 
                                 
                                 Console.WriteLine("The thief have stolen " + stolenItem + " at: " + citizen.X + "X " + citizen.Y + "Y");
-                                //Thread.Sleep(4000);
+                                Thread.Sleep(2000);
 
                             }
                         }
@@ -252,11 +256,11 @@ namespace ThiefAndPolice
                                 }
 
                                 thief.StolenItems.Clear();
-                                MoveToPrison(thief, personList, prisonList);
+                                MoveToPrison(thief, personList, prisonList,matrix);
 
 
                                 Console.WriteLine("The police have seized all stolen items from the thief at: " + thief.X + "X " + thief.Y + "Y");
-                                //Thread.Sleep(4000);
+                                Thread.Sleep(2000);
                             }
                         }
                     }
@@ -286,7 +290,7 @@ namespace ThiefAndPolice
 
                                 Console.WriteLine("Citizen walks into thief");
                                 Console.WriteLine("The thief has stolen " + stolenItem + " from the citizen at: " + citizen.X + "X " + citizen.Y + "Y");
-                                //Thread.Sleep(4000);
+                                Thread.Sleep(2000);
                             }
                         }
                     }
@@ -302,9 +306,17 @@ namespace ThiefAndPolice
         }
                 
             
-        public static void MoveToPrison(Person person,List<Person>personList, List<Person> prisonList)
+        public static void MoveToPrison(Person person,List<Person>personList, List<Person> prisonList, Person[,]personMatrix)
         {
             Thief thief = (Thief)person;
+
+            personMatrix[thief.X, thief.Y] = null; //set matrix to null
+
+            Random random = new Random();
+            // random theif pos 0-9 for prison
+            thief.X = random.Next(10);
+            thief.Y = random.Next(10);
+
             // Find the object you want to move.
             Person ThiefToMove = thief;
 
@@ -318,12 +330,14 @@ namespace ThiefAndPolice
 
                 // Set the object to null in the source list.
                 personList[index] = null;
-
                 
 
 
+               
+
                 Console.WriteLine("A thief was moved to prison for " +thief.PrisonTime);
-                Thread.Sleep(4000);
+                
+                Thread.Sleep(2000);
             }
             else
             {
@@ -331,6 +345,36 @@ namespace ThiefAndPolice
             }
 
 
+        }
+
+        public static void MoveBackToCity(Person person, List<Person> personList, List<Person> prisonList, Person[,]prisonMatrix)
+        {
+            Thief thief = (Thief)person;
+
+            prisonMatrix[thief.X, thief.Y] = null; //set matrix to null
+
+            // Find the object you want to move.
+            Person ThiefToMove = thief;
+
+            // Check if the item is in the source list before moving.
+            if (prisonList.Contains(ThiefToMove))
+            {
+                int index = prisonList.IndexOf(ThiefToMove);
+
+                // Add the object to the destination list.
+                personList.Add(ThiefToMove);
+
+                // Set the object to null in the source list.
+                prisonList[index] = null;
+
+
+
+
+                Console.WriteLine("A thief was moved from prison");
+
+                Thread.Sleep(2000);
+
+            }
         }
     }
 }

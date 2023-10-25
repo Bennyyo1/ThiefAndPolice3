@@ -50,18 +50,18 @@ public class Grid
 
     }
 
-    public static void PrintPrison(int prisonX, int prisonY, Person[,] matrix)
+    public static void PrintPrison(int prisonX, int prisonY, Person[,] prisonMatrix)
     {
 
         for (int row = 0; row < prisonX; row++) //loop x
         {
             for (int col = 0; col < prisonY; col++) //loop y
             {
-                if (matrix[row, col] == null)
+                if (prisonMatrix[row, col] == null)
                 {
-                    Console.Write("X");
+                    Console.Write(" ");
                 }
-                else if (matrix[row, col] is Thief)
+                else if (prisonMatrix[row, col] is Thief)
                 {
                     Console.Write("T");
                 }
