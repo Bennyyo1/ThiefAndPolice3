@@ -120,7 +120,7 @@ namespace ThiefAndPolice
                         {
                             Helper.PrisonMovement(thief, prisonMatrix, prisonX, prisonY, personList, prisonList);
                             thief.PrisonTime--;
-                            Thread.Sleep(1000);
+                            
                             if (thief.PrisonTime <= 0)
                             {
 
@@ -135,18 +135,18 @@ namespace ThiefAndPolice
 
                     for (int i = 0; i < personList.Count; i++)
                     {
-                    Person person = personList[i];
-                    if (person!= null)
-                    {
+
+                        Person person = personList[i];
+                        if (person!= null)
+                        {
                             Helper.Movement(person, matrix, SizeX, SizeY, personList, prisonList);
-                        
-                        
-                    }
+                        }
                     
+
                     }
                 
-                
-                
+
+
                 //Thread.Sleep(1000);
                 //prisonTime--;
                 Console.Clear();

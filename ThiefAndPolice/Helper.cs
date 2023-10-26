@@ -125,8 +125,14 @@ namespace ThiefAndPolice
 
             Thief thief = (Thief)person; // Cast to Thief type
 
-
-
+            if (thief.X>prisonX || thief.Y > prisonY) //if thief X,Y is bigger than prison size
+            {
+                Random random = new Random();
+                // random theif pos 0-9 for prison
+                thief.X = random.Next(10);
+                thief.Y = random.Next(10);
+            }
+            
 
             // Clear the previous position
             if (prisonMatrix[thief.X, thief.Y]!= null)
@@ -174,15 +180,15 @@ namespace ThiefAndPolice
                                 {
                                     thief.PrisonTime +=10;
                                     police.SizedItems.Add(stolenItem);
-                                    Console.WriteLine("The police have sized stolen " + stolenItem + " at: " + police.X + "X " + police.Y + "Y");
-                                    Thread.Sleep(4000);
+                                    
                                 }
  
                                 thief.StolenItems.Clear(); //remove thief items
                                 MoveToPrison(thief, personList, prisonList,matrix);
 
 
-
+                                Console.WriteLine("The police have seized all stolen items from the thief at: " + thief.X + "X " + thief.Y + "Y");
+                                Thread.Sleep(2000);
 
                             }
 
@@ -311,11 +317,7 @@ namespace ThiefAndPolice
             Thief thief = (Thief)person;
 
             personMatrix[thief.X, thief.Y] = null; //set matrix to null
-
-            Random random = new Random();
-            // random theif pos 0-9 for prison
-            thief.X = random.Next(10);
-            thief.Y = random.Next(10);
+          
 
             // Find the object you want to move.
             Person ThiefToMove = thief;
@@ -329,11 +331,8 @@ namespace ThiefAndPolice
                 prisonList.Add(ThiefToMove);
 
                 // Set the object to null in the source list.
-                personList[index] = null;
-                
-
-
-               
+                personList.Remove(ThiefToMove);
+                  
 
                 Console.WriteLine("A thief was moved to prison for " +thief.PrisonTime);
                 
@@ -350,6 +349,7 @@ namespace ThiefAndPolice
         public static void MoveBackToCity(Person person, List<Person> personList, List<Person> prisonList, Person[,]prisonMatrix)
         {
             Thief thief = (Thief)person;
+            
 
             prisonMatrix[thief.X, thief.Y] = null; //set matrix to null
 
@@ -365,7 +365,7 @@ namespace ThiefAndPolice
                 personList.Add(ThiefToMove);
 
                 // Set the object to null in the source list.
-                prisonList[index] = null;
+                prisonList.Remove(ThiefToMove);
 
 
 
